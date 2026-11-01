@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#142b4a">
+<meta name="description" content="Aplikasi keuangan Karnaval Ngapain Gank RT 38 Nyell.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>Keuangan Karnaval RT 38 Nyell</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#142b4a;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#app{height:100%;height:100dvh;display:flex;flex-direction:column}
+#bar{min-height:42px;background:#142b4a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:6px 12px;gap:8px;font-size:12px}
+#brand{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#status{display:flex;align-items:center;gap:6px;white-space:nowrap;color:#d9e4ef}
+.dot{width:7px;height:7px;border-radius:50%;background:#50c58b}
+#install{display:none;border:0;border-radius:7px;padding:7px 10px;background:#d9ad55;color:#142b4a;font-weight:800}
+#frame{border:0;width:100%;flex:1;background:#f4f6f9}
+#offline{display:none;position:absolute;left:10px;right:10px;top:48px;background:#fff4d7;color:#76551b;padding:10px 12px;border-radius:10px;font-size:12px;box-shadow:0 4px 20px #0002;z-index:2}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="bar">
+    <div id="brand">KEUANGAN KARNAVAL · RT 38 NYELL</div>
+    <div id="status"><span class="dot" id="dot"></span><span id="statusText">Online</span><button id="install">Pasang</button></div>
+  </div>
+  <div id="offline">Anda sedang offline. Kerangka aplikasi tersedia, tetapi data keuangan memerlukan koneksi internet.</div>
+  <iframe id="frame" title="Aplikasi Keuangan Karnaval" allow="clipboard-read; clipboard-write"></iframe>
+</div>
+<script>
+/* GANTI URL DI BAWAH INI DENGAN URL WEB APP APPS SCRIPT YANG BERAKHIR /exec */
+const APP_SCRIPT_URL = https://script.google.com/macros/s/AKfycbyFFpuGyOo48H3rn1khg0J1pWqyIEoFeSJEreXFuJe3ulI78fHEWQ_eTybpfCvyP3kpHg/exec;
+const frame=document.getElementById('frame');
+if(APP_SCRIPT_URL.startsWith('https://script.google.com/')){
+  frame.src=APP_SCRIPT_URL;
+}else{
+  document.getElementById('offline').style.display='block';
+  document.getElementById('offline').textContent='Konfigurasi belum selesai. Buka file index.html dan ganti APP_SCRIPT_URL dengan URL Web App Apps Script Anda.';
+}
+function updateNetwork(){
+ const online=navigator.onLine;
+ document.getElementById('dot').style.background=online?'#50c58b':'#e5a33b';
+ document.getElementById('statusText').textContent=online?'Online':'Offline';
+ document.getElementById('offline').style.display=online?'none':'block';
+}
+window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);updateNetwork();
+
+let installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+ e.preventDefault();installPrompt=e;document.getElementById('install').style.display='inline-block';
+});
+document.getElementById('install').addEventListener('click',async()=>{
+ if(!installPrompt)return;
+ installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;
+ document.getElementById('install').style.display='none';
+});
+window.addEventListener('appinstalled',()=>document.getElementById('install').style.display='none');
+
+if('serviceWorker' in navigator){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.log('SW:',err)));
+}
+</script>
+</body>
+</html>

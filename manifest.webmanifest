@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "Keuangan Karnaval Ngapain Gank RT 38 Nyell",
+  "short_name": "Keuangan RT 38",
+  "description": "Pencatatan anggaran, iuran, pemasukan, pengeluaran, dan laporan Karnaval RT 38 Nyell.",
+  "lang": "id-ID",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f6f9",
+  "theme_color": "#142b4a",
+  "icons": [
+    {"src":"./icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./icons/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}
